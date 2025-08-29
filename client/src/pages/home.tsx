@@ -14,9 +14,9 @@ export default function Home() {
   const { theme, toggleTheme } = useThemeContext();
 
   return (
-    <div className="flex h-screen">
+    <div className="flex flex-col md:flex-row h-screen w-full overflow-x-hidden">
       {/* Desktop Sidebar */}
-      <div className="hidden md:flex w-64 bg-card dark:bg-card border-r border-border dark:border-border">
+      <div className="hidden md:flex w-64 bg-card dark:bg-card border-r border-border dark:border-border flex-shrink-0">
         <Sidebar 
           onSettingsClick={() => setShowSettings(true)}
           selectedTag={selectedTag}
@@ -27,9 +27,9 @@ export default function Home() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col min-w-0 w-full">
         {/* Mobile Header */}
-        <div className="md:hidden flex items-center justify-between px-4 py-3 bg-card dark:bg-card border-b border-border dark:border-border">
+        <div className="md:hidden flex items-center justify-between px-4 py-3 bg-card dark:bg-card border-b border-border dark:border-border w-full">
           <h1 className="text-lg font-semibold">NoteTimes</h1>
           <div className="flex items-center space-x-1">
             <Button

@@ -298,28 +298,25 @@ export default function NoteInput() {
   };
 
   const insertOption = (option: typeof filteredOptions[0]) => {
-    const cursorPosition = textareaRef.current?.selectionStart || 0;
-    const textBeforeCursor = content.substring(0, autocompletePosition);
-    const textAfterCursor = content.substring(cursorPosition);
-    
-    // Insert based on option type
+    // Always insert at the autocomplete position and move caret to end of inserted value
+    const textBeforeInsert = content.substring(0, autocompletePosition);
+    const textAfterInsert = content.substring(autocompletePosition);
+
     let valueToInsert: string;
     if (option.type === 'value') {
-      // Use invisible markers to track variable values - using Zero Width Space (U+200B)
       valueToInsert = `\u200B${option.value}\u200B`;
     } else {
-      // Insert variable name
       valueToInsert = `/${option.variable.name}`;
     }
-    
-    const newContent = textBeforeCursor + valueToInsert + textAfterCursor;
+
+    const newContent = textBeforeInsert + valueToInsert + textAfterInsert;
     setContent(newContent);
     setShowAutocomplete(false);
-    
-    // Focus back to textarea
+
+    // Focus back to textarea and set caret after inserted value
     setTimeout(() => {
       if (textareaRef.current) {
-        const newCursorPosition = textBeforeCursor.length + valueToInsert.length;
+        const newCursorPosition = textBeforeInsert.length + valueToInsert.length;
         textareaRef.current.focus();
         textareaRef.current.setSelectionRange(newCursorPosition, newCursorPosition);
       }

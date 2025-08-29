@@ -199,8 +199,8 @@ export default function NotesArea({ selectedTag, selectedFolder }: NotesAreaProp
   };
 
   return (
-    <div className="flex-1 overflow-hidden">
-      <div className="h-full flex flex-col max-w-4xl mx-auto">
+    <div className="flex-1 overflow-x-hidden w-full">
+      <div className="h-full flex flex-col w-full max-w-4xl mx-auto px-2 sm:px-4">
         {/* Filter Status and Sort Controls */}
         <div className="px-4 py-3 bg-accent/10 border-b border-border">
           {/* Mobile-first responsive layout */}
@@ -269,7 +269,7 @@ export default function NotesArea({ selectedTag, selectedFolder }: NotesAreaProp
         </div>
         
         {/* Notes List */}
-        <div className="flex-1 overflow-y-auto p-3 md:p-6 space-y-3 md:space-y-4">
+  <div className="flex-1 overflow-y-auto p-2 sm:p-3 md:p-6 space-y-3 md:space-y-4 w-full">
           {Object.keys(notesByDate).length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-center">
               <div className="text-muted-foreground mb-2">
@@ -299,11 +299,11 @@ export default function NotesArea({ selectedTag, selectedFolder }: NotesAreaProp
                   <div className="space-y-3 md:space-y-4">
                     {dayNotes.map((note) => (
                         <div key={note.id} className="note-entry group relative" data-testid={`note-${note.id}`}>
-                          <div className="flex items-start space-x-2 md:space-x-3">
+                          <div className="flex flex-col xs:flex-row items-start xs:space-x-2 md:space-x-3 w-full">
                             <span className="timestamp text-muted-foreground mt-1 min-w-[50px] md:min-w-[60px] font-mono text-xs">
                               {format(new Date(note.createdAt), 'hh:mm a')}
                             </span>
-                            <div className="flex-1 min-w-0">
+                            <div className="flex-1 min-w-0 w-full">
                               {note.tags && note.tags.length > 0 && (
                                 <div className="flex flex-wrap items-center mb-2 gap-1 md:gap-2">
                                   {note.tags.map((tag, index) => (
