@@ -29,9 +29,9 @@ export default function Home() {
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
         {/* Mobile Header */}
-        <div className="md:hidden flex items-center justify-between p-4 bg-card dark:bg-card border-b border-border dark:border-border">
+        <div className="md:hidden flex items-center justify-between px-4 py-3 bg-card dark:bg-card border-b border-border dark:border-border">
           <h1 className="text-lg font-semibold">NoteTimes</h1>
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-1">
             <Button
               variant="ghost"
               size="icon"

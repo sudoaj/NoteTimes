@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { format, isSameDay, parseISO } from "date-fns";
-import { ArrowUpDown, Clock, Hash, Trash2 } from "lucide-react";
+import { format, parseISO } from "date-fns";
+import { Clock, Hash, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import NoteInput from "./note-input";
 import NoteDownload from "./note-download";
@@ -202,66 +202,74 @@ export default function NotesArea({ selectedTag, selectedFolder }: NotesAreaProp
     <div className="flex-1 overflow-hidden">
       <div className="h-full flex flex-col max-w-4xl mx-auto">
         {/* Filter Status and Sort Controls */}
-        <div className="px-4 py-2 bg-accent/10 border-b border-border">
-          <div className="flex items-center justify-between">
+        <div className="px-4 py-3 bg-accent/10 border-b border-border">
+          {/* Mobile-first responsive layout */}
+          <div className="flex flex-col space-y-3 md:flex-row md:items-center md:justify-between md:space-y-0">
             <div className="text-sm text-muted-foreground">
               {(selectedTag || selectedFolder) ? (
-                <>
-                  Showing: 
-                  {selectedTag && <span className="bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 px-2 py-1 rounded text-xs mr-2">#{selectedTag}</span>}
-                  {selectedFolder && <span className="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300 px-2 py-1 rounded text-xs mr-2">📁 {selectedFolder}</span>}
-                  ({sortedNotes.length} notes)
-                </>
+                <div className="flex flex-wrap items-center gap-2">
+                  <span>Showing:</span>
+                  {selectedTag && <span className="bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 px-2 py-1 rounded text-xs">#{selectedTag}</span>}
+                  {selectedFolder && <span className="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300 px-2 py-1 rounded text-xs">📁 {selectedFolder}</span>}
+                  <span>({sortedNotes.length} notes)</span>
+                </div>
               ) : (
                 <>🏠 Home - Showing all notes ({sortedNotes.length} total)</>
               )}
             </div>
             
             {/* Download and Sort Controls */}
-            <div className="flex items-center space-x-4">
-              {/* Download Button */}
-              <NoteDownload notes={sortedNotes} folderName={selectedFolder} />
+            <div className="flex flex-col space-y-2 md:flex-row md:items-center md:space-y-0 md:space-x-4">
+              {/* Download Button - Hidden on mobile, available in mobile menu */}
+              <div className="hidden md:block">
+                <NoteDownload notes={sortedNotes} folderName={selectedFolder || undefined} />
+              </div>
               
               {/* Sort Controls */}
-              <div className="flex items-center space-x-2">
-                <span className="text-xs text-muted-foreground">Sort:</span>
-              <Button
-                variant={sortBy === 'newest' ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setSortBy('newest')}
-                className="h-7 px-2 text-xs"
-                data-testid="button-sort-newest"
-              >
-                <Clock className="w-3 h-3 mr-1" />
-                Newest
-              </Button>
-              <Button
-                variant={sortBy === 'oldest' ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setSortBy('oldest')}
-                className="h-7 px-2 text-xs"
-                data-testid="button-sort-oldest"
-              >
-                <Clock className="w-3 h-3 mr-1" />
-                Oldest
-              </Button>
-              <Button
-                variant={sortBy === 'mentions' ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setSortBy('mentions')}
-                className="h-7 px-2 text-xs"
-                data-testid="button-sort-mentions"
-              >
-                <Hash className="w-3 h-3 mr-1" />
-                Variables
-              </Button>
+              <div className="flex flex-col space-y-2 md:flex-row md:items-center md:space-y-0 md:space-x-2">
+                <span className="text-xs text-muted-foreground md:block hidden">Sort:</span>
+                <div className="flex space-x-1">
+                  <Button
+                    variant={sortBy === 'newest' ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => setSortBy('newest')}
+                    className="h-8 px-3 text-xs flex-1 md:flex-none"
+                    data-testid="button-sort-newest"
+                  >
+                    <Clock className="w-3 h-3 mr-1" />
+                    <span className="md:inline hidden">Newest</span>
+                    <span className="md:hidden">New</span>
+                  </Button>
+                  <Button
+                    variant={sortBy === 'oldest' ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => setSortBy('oldest')}
+                    className="h-8 px-3 text-xs flex-1 md:flex-none"
+                    data-testid="button-sort-oldest"
+                  >
+                    <Clock className="w-3 h-3 mr-1" />
+                    <span className="md:inline hidden">Oldest</span>
+                    <span className="md:hidden">Old</span>
+                  </Button>
+                  <Button
+                    variant={sortBy === 'mentions' ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => setSortBy('mentions')}
+                    className="h-8 px-3 text-xs flex-1 md:flex-none"
+                    data-testid="button-sort-mentions"
+                  >
+                    <Hash className="w-3 h-3 mr-1" />
+                    <span className="md:inline hidden">Variables</span>
+                    <span className="md:hidden">Vars</span>
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
         </div>
         
         {/* Notes List */}
-        <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4">
+        <div className="flex-1 overflow-y-auto p-3 md:p-6 space-y-3 md:space-y-4">
           {Object.keys(notesByDate).length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-center">
               <div className="text-muted-foreground mb-2">
@@ -288,16 +296,16 @@ export default function NotesArea({ selectedTag, selectedFolder }: NotesAreaProp
                   </div>
 
                   {/* Notes for this date */}
-                  <div className="space-y-4">
+                  <div className="space-y-3 md:space-y-4">
                     {dayNotes.map((note) => (
                         <div key={note.id} className="note-entry group relative" data-testid={`note-${note.id}`}>
-                          <div className="flex items-start space-x-3">
-                            <span className="timestamp text-muted-foreground mt-1 min-w-[60px] font-mono text-xs">
+                          <div className="flex items-start space-x-2 md:space-x-3">
+                            <span className="timestamp text-muted-foreground mt-1 min-w-[50px] md:min-w-[60px] font-mono text-xs">
                               {format(new Date(note.createdAt), 'hh:mm a')}
                             </span>
-                            <div className="flex-1">
+                            <div className="flex-1 min-w-0">
                               {note.tags && note.tags.length > 0 && (
-                                <div className="flex items-center mb-2 space-x-2">
+                                <div className="flex flex-wrap items-center mb-2 gap-1 md:gap-2">
                                   {note.tags.map((tag, index) => (
                                     <span
                                       key={tag}
@@ -317,7 +325,7 @@ export default function NotesArea({ selectedTag, selectedFolder }: NotesAreaProp
                                   📁 {note.folder}
                                 </div>
                               )}
-                              <div className="note-content text-foreground font-serif leading-relaxed" style={{ fontSize: 'var(--notes-font-size, 14px)' }}>
+                              <div className="note-content text-foreground font-serif leading-relaxed break-words" style={{ fontSize: 'var(--notes-font-size, 14px)' }}>
                                 {renderContentWithHighlights(note.originalContent || note.content)}
                               </div>
                             </div>
@@ -329,7 +337,7 @@ export default function NotesArea({ selectedTag, selectedFolder }: NotesAreaProp
                                   deleteNoteMutation.mutate(note.id);
                                 }
                               }}
-                              className="opacity-0 group-hover:opacity-100 absolute top-1 right-1 p-1 text-muted-foreground hover:text-red-500 transition-all duration-200"
+                              className="opacity-0 group-hover:opacity-100 md:absolute md:top-1 md:right-1 relative top-0 right-0 p-1 text-muted-foreground hover:text-red-500 transition-all duration-200 flex-shrink-0"
                               title="Delete note"
                             >
                               <Trash2 className="w-4 h-4" />

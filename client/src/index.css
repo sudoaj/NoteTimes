@@ -99,6 +99,18 @@
   .variable-highlight {
     @apply inline-flex items-center px-2 py-1 mx-0.5 rounded-md text-sm font-semibold bg-gradient-to-r from-purple-100 to-blue-100 text-purple-800 border border-purple-200 shadow-sm;
   }
+
+  /* Mobile-specific improvements */
+  @media (max-width: 768px) {
+    .note-content {
+      font-size: 15px;
+      line-height: 1.5;
+    }
+    
+    .variable-highlight {
+      @apply text-xs px-1.5 py-0.5 mx-0.5;
+    }
+  }
 }
 
 @layer utilities {
